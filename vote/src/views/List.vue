@@ -253,7 +253,7 @@ export default defineComponent({
       state.type = (route.query.type as string) || "1";
       await loadData();
       window.addEventListener("scroll", onReachBottom);
-      await wx.shareAll(state.info);
+      await wx.shareAll(state.info, {}, ky.yesNo(state.myInfo.can_share));
     });
     onUpdated(() => {
       lazy.lazyload(document.querySelectorAll(".lazyload:not([src])"));

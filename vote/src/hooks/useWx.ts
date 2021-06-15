@@ -1,6 +1,6 @@
 // @ts-ignore
 import wx from "weixin-js-sdk";
-import { getWxShare } from "@/apis";
+import { getWxShare, postShare } from "@/apis";
 import { isMobile } from "@/consts";
 import { useStore } from "vuex";
 import { unescapeHTML } from "@/utils/dom";
@@ -9,7 +9,8 @@ export default () => {
   const store = useStore();
   const wxShare = async (
     info: any,
-    { shareUrl = "", shareTitle = "", shareDesc = "" } = {}
+    { shareUrl = "", shareTitle = "", shareDesc = "" } = {},
+    canShare = false
   ) => {
     document.title = unescapeHTML(info.title || "");
     document
@@ -20,7 +21,10 @@ export default () => {
       .setAttribute("content", info.keywords || "");
     const shareInfo = info.share_info;
     if (isMobile && shareInfo) {
-      shareInfo.callback = () => {
+      shareInfo.callback = async () => {
+        if (canShare) {
+          await postShare();
+        }
         location.reload();
       };
       shareInfo.apilist = [
@@ -112,9 +116,10 @@ export default () => {
   };
   const shareAll = async (
     info: any,
-    { shareUrl = "", shareTitle = "", shareDesc = "" } = {}
+    { shareUrl = "", shareTitle = "", shareDesc = "" } = {},
+    canShare = false
   ) => {
-    await wxShare(info, { shareUrl, shareTitle, shareDesc });
+    await wxShare(info, { shareUrl, shareTitle, shareDesc }, canShare);
     appShare(info, { shareUrl, shareTitle, shareDesc });
   };
   return {

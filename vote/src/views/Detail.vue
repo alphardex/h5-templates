@@ -182,9 +182,13 @@ export default defineComponent({
       state.myInfo = await getMyInfo();
       state.myInfo.my_time = Number(state.myInfo.my_time);
       state.detail = await getDetail({ id: detailId.value });
-      await wx.shareAll(state.info, {
-        shareUrl: state.detail.share_url,
-      });
+      await wx.shareAll(
+        state.info,
+        {
+          shareUrl: state.detail.share_url,
+        },
+        ky.yesNo(state.myInfo.can_share)
+      );
     });
     return { ky, dialog, wx, ...toRefs(state), doVote };
   },

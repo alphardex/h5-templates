@@ -74,7 +74,7 @@ export default defineComponent({
     onMounted(async () => {
       state.info = await getInfo();
       state.myInfo = await getMyInfo();
-      await wx.shareAll(state.info);
+      await wx.shareAll(state.info, {}, false);
     });
     return { ky, dialog, wx, ...toRefs(state), enter };
   },
