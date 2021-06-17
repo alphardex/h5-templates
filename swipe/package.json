@@ -79,7 +79,8 @@
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-empty-function": "off",
-      "prefer-const": "off"
+      "prefer-const": "off",
+      "vue/no-unused-components": "off"
     }
   },
   "browserslist": [

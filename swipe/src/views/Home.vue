@@ -37,12 +37,14 @@ import { getInfo } from "@/apis";
 import ky from "kyouka";
 // @ts-ignore
 import { Swiper, SwiperSlide } from "swiper/vue";
+import TimeRange from "@/components/TimeRange.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     Swiper,
     SwiperSlide,
+    TimeRange,
   },
   setup() {
     const dialog = useDialog();

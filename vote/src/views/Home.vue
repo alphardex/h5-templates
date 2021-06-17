@@ -42,11 +42,13 @@ import ky from "kyouka";
 import { gzh, needSubscribe } from "@/consts";
 import MyBtn from "@/components/MyBtn.vue";
 import router from "@/router";
+import TimeRange from "@/components/TimeRange.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     MyBtn,
+    TimeRange,
   },
   setup() {
     const dialog = useDialog();

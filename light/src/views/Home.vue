@@ -195,12 +195,14 @@ import { checkAgree, checkNameAndTel } from "@/utils/check";
 import { TimerAlert } from "@/utils/alert";
 import LightStatus from "@/components/LightStatus.vue";
 import MyBtn from "@/components/MyBtn.vue";
+import TimeRange from "@/components/TimeRange.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     LightStatus,
     MyBtn,
+    TimeRange,
   },
   setup() {
     const dialog = useDialog();

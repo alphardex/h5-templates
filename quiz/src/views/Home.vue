@@ -83,12 +83,14 @@ import {
 import { checkDate } from "@/utils/check";
 import router from "@/router";
 import MyBtn from "@/components/MyBtn.vue";
+import TimeRange from "@/components/TimeRange.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     NavBar,
     MyBtn,
+    TimeRange,
   },
   setup() {
     const dialog = useDialog();
