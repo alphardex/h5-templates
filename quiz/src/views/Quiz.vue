@@ -48,6 +48,11 @@
                   :for="`choice-${item.value}`"
                   :data-choice="item.value"
                 >
+                  <span
+                    class="choice-label-dot flex-none relative box-border w-4 h-4 rounded-full mr-2"
+                    :class="{ square: currentQuestionType === 'checkbox' }"
+                    v-if="showChoiceDot"
+                  ></span>
                   <span>
                     <span>{{ item.value }}. </span>
                     <span
@@ -149,7 +154,13 @@ import { getInfo, getQuestions, postSubmit } from "@/apis";
 import ky from "kyouka";
 import { Timer } from "@/utils/timer";
 import { isOk } from "@/utils/request";
-import { needQuizTimer, needShowRightOrWrong } from "@/consts";
+import {
+  canRetryWhenWrong,
+  needQuizTimer,
+  needShowRightOrWrong,
+  showRightAnswerWhenWrong,
+  showChoiceDot,
+} from "@/consts";
 import MyBtn from "@/components/MyBtn.vue";
 import { Alert } from "@/utils/alert";
 
@@ -182,6 +193,7 @@ export default defineComponent({
       timer: null,
       timeLimit: 180,
       isSubmittedBeforeTimeUp: false,
+      showChoiceDot,
     });
     // 当前问题
     const currentQuestion = computed(() => {
@@ -248,24 +260,24 @@ export default defineComponent({
     };
     // 判断正误
     const judge = async (needsCheck = true) => {
+      let isRight = false;
       let { myAnswerRadio, myAnswerCheckbox } = state;
       myAnswerCheckbox = myAnswerCheckbox.sort();
+      const myAnswerCheckboxString = myAnswerCheckbox.join(",");
+      const correctAnswer = currentQuestion.value.ext2;
       if (currentQuestionType.value === "radio") {
         if (needsCheck && !myAnswerRadio) {
           Alert.fire("请先做出选择再点击下一题");
           return;
         }
-        // 单选添加答案
-        const answerRadio = `${currentQuestion.value.id}|${myAnswerRadio}`;
-        state.myAnswers.push(answerRadio);
-        const correctAnswer = currentQuestion.value.ext2;
+        // 单选判断对错
         if (myAnswerRadio === correctAnswer) {
-          state.score += state.scoreRate;
+          isRight = true;
         }
         // 单选显示对错
         if (needShowRightOrWrong) {
           state.disableClick = true;
-          if (myAnswerRadio === correctAnswer) {
+          if (isRight) {
             const rightChoice = document.querySelector(
               `.choice-label[data-choice=${myAnswerRadio}]`
             );
@@ -273,11 +285,13 @@ export default defineComponent({
               rightChoice!.classList.add("right");
             }
           } else {
-            const rightChoice = document.querySelector(
-              `.choice-label[data-choice=${correctAnswer}]`
-            );
-            if (rightChoice) {
-              rightChoice!.classList.add("right");
+            if (showRightAnswerWhenWrong) {
+              const rightChoice = document.querySelector(
+                `.choice-label[data-choice=${correctAnswer}]`
+              );
+              if (rightChoice) {
+                rightChoice!.classList.add("right");
+              }
             }
             const wrongChoice = document.querySelector(
               `.choice-label[data-choice=${myAnswerRadio}]`
@@ -292,12 +306,9 @@ export default defineComponent({
           Alert.fire("请先做出选择再点击下一题");
           return;
         }
-        // 多选添加答案
-        const myAnswerCheckboxString = myAnswerCheckbox.join(",");
-        const answerCheckbox = `${currentQuestion.value.id}|${myAnswerCheckboxString}`;
-        state.myAnswers.push(answerCheckbox);
-        if (myAnswerCheckboxString === currentQuestion!.value.ext2) {
-          state.score += state.scoreRate;
+        // 多选判断对错
+        if (myAnswerCheckboxString === correctAnswer) {
+          isRight = true;
         }
         // 多选显示对错
         if (needShowRightOrWrong) {
@@ -330,7 +341,25 @@ export default defineComponent({
       }
       state.myAnswerRadio = "";
       state.myAnswerCheckbox = [];
+      // 重答本题
+      if (canRetryWhenWrong && !isRight) {
+        return;
+      }
       currentQuestion.value.answered = true;
+      // 加分
+      if (isRight) {
+        state.score += state.scoreRate;
+      }
+      // 添加答案
+      if (currentQuestionType.value === "radio") {
+        // 单选添加答案
+        const answerRadio = `${currentQuestion.value.id}|${myAnswerRadio}`;
+        state.myAnswers.push(answerRadio);
+      } else if (currentQuestionType.value === "checkbox") {
+        // 多选添加答案
+        const answerCheckbox = `${currentQuestion.value.id}|${myAnswerCheckboxString}`;
+        state.myAnswers.push(answerCheckbox);
+      }
       if (!isLastQuestion.value) {
         nextQuestion();
       } else {
@@ -405,6 +434,12 @@ export default defineComponent({
     & ~ .choice-label {
       color: white;
       background: black;
+
+      .choice-label-dot {
+        &::before {
+          transform: scale(0.4);
+        }
+      }
     }
   }
 }
@@ -419,6 +454,44 @@ export default defineComponent({
   &.wrong {
     .wrong-icon {
       opacity: 1;
+    }
+  }
+}
+
+@mixin cover(
+  $top: 0,
+  $left: 0,
+  $width: 100%,
+  $height: 100%,
+  $position: absolute
+) {
+  position: $position;
+  top: $top;
+  left: $left;
+  width: $width;
+  height: $height;
+}
+
+.choice-label-dot {
+  --dot-color: var(--primary-color);
+  --dot-border-color: var(--primary-color);
+
+  box-shadow: inset 0 0 0 2px var(--dot-border-color);
+
+  &::before {
+    @include cover;
+    content: "";
+    background: var(--dot-color);
+    border-radius: inherit;
+    transform: scale(0);
+    transition: 0.3s;
+  }
+
+  &.square {
+    border-radius: 0 !important;
+
+    &::before {
+      border-radius: 0 !important;
     }
   }
 }

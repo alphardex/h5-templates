@@ -1,7 +1,7 @@
 <template>
   <div class="relative min-h-screen">
-    <div @click="enter">
-      进入
+    <div class="text-center">
+      <my-btn @click="enter">开始答题</my-btn>
     </div>
     <div class="absolute bottom-14 h-center text-sm">常熟零距离技术支持</div>
     <nav-bar :navItems="navItems"></nav-bar>

@@ -58,6 +58,9 @@ const needCheckChance = true;
 const needReceivePrizeSendMsg = true;
 const needQuizTimer = true;
 const needShowRightOrWrong = true;
+const canRetryWhenWrong = true;
+const showRightAnswerWhenWrong = false;
+const showChoiceDot = true;
 
 const gzh = {
   name: "公众号名",
@@ -82,4 +85,7 @@ export {
   needReceivePrizeSendMsg,
   needQuizTimer,
   needShowRightOrWrong,
+  canRetryWhenWrong,
+  showRightAnswerWhenWrong,
+  showChoiceDot,
 };

@@ -51,6 +51,10 @@
           </div>
         </div>
       </div>
+      <!-- 领奖说明 -->
+      <div class="card">
+        <div class="whitespace-pre-wrap" v-html="info.ljsm" v-if="info"></div>
+      </div>
     </div>
     <nav-bar :navItems="navItems"></nav-bar>
     <teleport to="#dialogs">

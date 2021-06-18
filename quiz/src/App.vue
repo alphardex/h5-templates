@@ -112,6 +112,16 @@ $colors: "red", "orange", "yellow", "green", "blue", "purple", "brown", "black",
 
 // common
 
+.btn {
+  display: inline-flex;
+
+  &-sm {
+    --btn-padding: 1vw 2vw;
+
+    font-size: 3vw;
+  }
+}
+
 .dialog {
   animation: fade-in 0.6s both;
 }
