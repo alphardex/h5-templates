@@ -13,7 +13,7 @@ const postSubmit = (body: any) => post(API.submit, body, true);
 
 const postLottery = () => post(API.lottery);
 
-const postApply = (body: any) => post(API.apply, body);
+const postApply = (body: any) => post(API.apply, body, true);
 
 const getMyPrize = () => get(API.myPrize);
 
