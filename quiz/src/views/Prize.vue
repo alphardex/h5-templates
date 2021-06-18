@@ -78,9 +78,6 @@
               <div v-if="Number(info.canShare)">
                 邀请好友可增加1次抽奖机会
               </div>
-              <div v-else>
-                去答题可增加1次抽奖机会
-              </div>
             </div>
           </div>
         </div>
@@ -107,7 +104,7 @@
                 邀请好友可增加1次抽奖机会
               </div>
               <div v-else>
-                去答题可增加1次抽奖机会
+                请明天再来吧
               </div>
             </div>
           </div>
