@@ -13,6 +13,7 @@
               v-for="n in 3"
               :key="n"
               @click="doLottery"
+              :class="{ 'pointer-events-none': disableClick }"
             />
           </div>
           <div v-if="info">
@@ -75,14 +76,14 @@
           <div class="text-center text-sm whitespace-no-wrap">
             <div>你没有抽奖机会哦</div>
             <div v-if="info">
-              <div v-if="Number(info.canShare)">
+              <div v-if="Number(info.lotteryed) >= 1 && Number(info.canShare)">
                 邀请好友可增加1次抽奖机会
               </div>
             </div>
           </div>
         </div>
         <div class="absolute h-center -bottom-16" v-if="info">
-          <my-btn v-if="Number(info.canShare)" @click="dialog.openShareTip">
+          <my-btn v-if="Number(info.lotteryed) >= 1 && Number(info.canShare)">
             邀请好友
           </my-btn>
           <router-link v-else :to="{ name: 'Home' }">
