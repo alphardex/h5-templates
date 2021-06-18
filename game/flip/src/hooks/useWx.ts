@@ -1,7 +1,7 @@
 // @ts-ignore
 import wx from "weixin-js-sdk";
-import { getWxShare } from "@/apis";
-import { isMobile } from "@/consts";
+import { getWxShare, postShare } from "@/apis";
+import { canShareAddChance, isMobile } from "@/consts";
 import { useStore } from "vuex";
 import { unescapeHTML } from "@/utils/dom";
 
@@ -20,7 +20,10 @@ export default () => {
       .setAttribute("content", info.keywords || "");
     const shareInfo = info.share_info;
     if (isMobile && shareInfo) {
-      shareInfo.callback = () => {
+      shareInfo.callback = async () => {
+        if (canShareAddChance) {
+          await postShare({ aff: info.aff });
+        }
         location.reload();
       };
       shareInfo.apilist = [

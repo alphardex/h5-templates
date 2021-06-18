@@ -7,7 +7,7 @@ const getInfo = () => get(API.info);
 
 const postUploadPic = (body: any) => post(API.uploadPic, body);
 
-const postShare = () => post(API.share);
+const postShare = (body: any) => post(API.share, body);
 
 const postSubmit = (body: any) => post(API.submit, body, true);
 

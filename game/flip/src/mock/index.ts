@@ -52,6 +52,7 @@ class MockServer {
         isJoin: 1,
         myScore: 666,
         myRank: 100,
+        ljsm: "领奖说明",
       },
     });
     mock.onPost(API.uploadPic).reply(200, {

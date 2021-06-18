@@ -55,6 +55,7 @@ const needSubscribe = false;
 const needCheckDate = true;
 const needCheckChance = true;
 const needReceivePrizeSendMsg = true;
+const canShareAddChance = true;
 
 const gzh = {
   name: "公众号名",
@@ -85,4 +86,5 @@ export {
   needReceivePrizeSendMsg,
   gzh,
   memoryCardState,
+  canShareAddChance,
 };
