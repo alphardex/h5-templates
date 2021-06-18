@@ -266,6 +266,7 @@ export default defineComponent({
       const myAnswerCheckboxString = myAnswerCheckbox.join(",");
       const correctAnswer = currentQuestion.value.ext2;
       if (currentQuestionType.value === "radio") {
+        // 单选判断空值
         if (needsCheck && !myAnswerRadio) {
           Alert.fire("请先做出选择再点击下一题");
           return;
@@ -302,6 +303,7 @@ export default defineComponent({
           }
         }
       } else {
+        // 多选判断空值
         if (needsCheck && ky.isEmpty(myAnswerCheckbox)) {
           Alert.fire("请先做出选择再点击下一题");
           return;
@@ -330,6 +332,7 @@ export default defineComponent({
           });
         }
       }
+      // 显示对错等待
       if (needShowRightOrWrong) {
         await ky.sleep(1200);
         const choices = document.querySelectorAll(".choice-label");
@@ -360,6 +363,7 @@ export default defineComponent({
         const answerCheckbox = `${currentQuestion.value.id}|${myAnswerCheckboxString}`;
         state.myAnswers.push(answerCheckbox);
       }
+      // 下一题
       if (!isLastQuestion.value) {
         nextQuestion();
       } else {
