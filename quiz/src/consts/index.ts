@@ -61,6 +61,7 @@ const needShowRightOrWrong = true;
 const canRetryWhenWrong = true;
 const showRightAnswerWhenWrong = false;
 const showChoiceDot = true;
+const canShareAddChance = true;
 
 const gzh = {
   name: "公众号名",
@@ -88,4 +89,5 @@ export {
   canRetryWhenWrong,
   showRightAnswerWhenWrong,
   showChoiceDot,
+  canShareAddChance,
 };
