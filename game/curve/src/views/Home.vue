@@ -68,7 +68,7 @@ export default defineComponent({
       info: null,
       myInfo: null,
     });
-    // 检测是否有答题机会
+    // 检测是否有游戏机会
     const checkHaveChance = () => {
       if (needCheckChance && Number(state.myInfo.my_time) < 1) {
         dialog.openGameNoChanceDialog();

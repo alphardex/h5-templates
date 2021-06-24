@@ -131,12 +131,6 @@ $colors: "red", "orange", "yellow", "green", "blue", "purple", "brown", "black",
   }
 }
 
-@for $i from 6 through 8 {
-  .z-#{$i} {
-    z-index: #{$i};
-  }
-}
-
 // common
 
 .btn {
@@ -171,5 +165,9 @@ $colors: "red", "orange", "yellow", "green", "blue", "purple", "brown", "black",
   height: 21vh;
   background: url("./assets/share-tip.png") 0 0 / contain no-repeat;
   animation: fade-in-bottom 0.6s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+.bg-game {
+  background: url("./assets/bg-game.jpg") 0 0 / cover no-repeat;
 }
 </style>

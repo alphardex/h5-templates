@@ -1,25 +1,14 @@
 import "phaser";
 import ky from "kyouka";
-import {
-  leftBtnUrl,
-  obstacleUrl,
-  playerUrl,
-  presentUrl,
-  rightBtnUrl,
-} from "@/consts";
 import store from "@/store";
 import { last } from "@/utils/dom";
+import { Point } from "@/utils/math";
 // @ts-ignore
 import PathFollower from "phaser3-rex-plugins/plugins/pathfollower.js";
-import { Point } from "@/utils/math";
+import { resourceUrls } from "@/consts";
+import { point2Vector, points2Vectors } from "@/utils/game";
 
-// 点坐标转为向量
-const point2Vector = (point: Point) =>
-  new Phaser.Math.Vector2(ky.vw2px(point.x), ky.vh2px(point.y));
-
-const points2Vectors = (points: Point[]) => points.map((p) => point2Vector(p));
-
-// Finished
+// 曲线路径运动游戏
 // 1. 生成曲线，玩家能沿着曲线移动
 // 2. 玩家碰到礼物加分，碰到障碍游戏结束
 // 3. 点击按钮能左右移动角色
@@ -27,7 +16,8 @@ const points2Vectors = (points: Point[]) => points.map((p) => point2Vector(p));
 // 5. 随机生成曲线
 // 6. 生成复杂的曲线
 // 7. 随机生成礼物和障碍
-class Boat extends Phaser.Scene {
+// 8. 礼物和障碍物的图片是随机的
+class CurveGame extends Phaser.Scene {
   params: any;
   path: Phaser.Curves.Path | null;
   playerStartPoint: Point;
@@ -47,10 +37,11 @@ class Boat extends Phaser.Scene {
   isInvincible: boolean;
   tween: Phaser.Tweens.Tween | null;
   constructor() {
-    super("boat");
+    super("curveGame");
     this.params = {
       lineWidth: 4, // 路线宽度
-      lineColor: 0x959499, // 路线颜色
+      lineColor: 0xff0000, // 路线颜色
+      lineAlpha: 0.31, // 路线透明度
       imageScale: 0.4, // 图片缩放比例
       btnImageScale: 0.6, // 按钮图缩放比例
       playerMoveGap: 100, // 玩家移动间距
@@ -60,6 +51,8 @@ class Boat extends Phaser.Scene {
       timeScaleAcceleration: 0.0001, // 时间幅度加速度
       useCirclePath: false, // 使用圆形路径
       pathCount: 200, // 路径总数
+      obstacleTypeCount: 2, // 障碍种类数
+      presentTypeCount: 2, // 礼物种类数
     };
     this.path = null; // 路径
     this.playerStartPoint = { x: 0, y: 0 }; // 玩家起点
@@ -81,11 +74,21 @@ class Boat extends Phaser.Scene {
   }
   // 预加载
   preload() {
-    this.load.image("player", playerUrl);
-    this.load.image("obstacle", obstacleUrl);
-    this.load.image("present", presentUrl);
-    this.load.image("leftBtn", leftBtnUrl);
-    this.load.image("rightBtn", rightBtnUrl);
+    this.load.image("player", resourceUrls.playerUrl);
+    this.load.image("leftBtn", resourceUrls.leftBtnUrl);
+    this.load.image("rightBtn", resourceUrls.rightBtnUrl);
+    for (let i = 0; i < this.params.obstacleTypeCount; i++) {
+      this.load.image(
+        `obstacle-${i + 1}`,
+        (resourceUrls as any)[`obstacle${i + 1}Url`]
+      );
+    }
+    for (let i = 0; i < this.params.presentTypeCount; i++) {
+      this.load.image(
+        `present-${i + 1}`,
+        (resourceUrls as any)[`present${i + 1}Url`]
+      );
+    }
   }
   // 创建一切
   create() {
@@ -174,7 +177,11 @@ class Boat extends Phaser.Scene {
   // 绘制路径
   drawPath(path: Phaser.Curves.Path) {
     const graphics = this.add.graphics();
-    graphics.lineStyle(this.params.lineWidth, this.params.lineColor);
+    graphics.lineStyle(
+      this.params.lineWidth,
+      this.params.lineColor,
+      this.params.lineAlpha
+    );
     path.draw(graphics);
   }
   // 创建玩家
@@ -254,7 +261,12 @@ class Boat extends Phaser.Scene {
   }
   // 创建障碍物
   createObstacle({ x = 0, y = 0, radius = 0, name = "" }) {
-    const obstacle = this.physics.add.image(x, y, "obstacle");
+    const obstacleType = ky.randomIntegerInRange(
+      1,
+      this.params.obstacleTypeCount
+    );
+    const obstacleUrlName = `obstacle-${obstacleType}`;
+    const obstacle = this.physics.add.image(x, y, obstacleUrlName);
     obstacle.setScale(this.params.imageScale);
     obstacle.setRotation(radius);
     obstacle.setName(name);
@@ -276,7 +288,12 @@ class Boat extends Phaser.Scene {
   }
   // 创建礼物
   createPresent({ x = 0, y = 0, radius = 0, name = "" }) {
-    const present = this.physics.add.image(x, y, "present");
+    const presentType = ky.randomIntegerInRange(
+      1,
+      this.params.presentTypeCount
+    );
+    const presentUrlName = `present-${presentType}`;
+    const present = this.physics.add.image(x, y, presentUrlName);
     present.setScale(this.params.imageScale);
     present.setRotation(radius);
     present.setName(name);
@@ -381,9 +398,15 @@ class Boat extends Phaser.Scene {
       .setScrollFactor(0);
     leftBtn.setScale(this.params.btnImageScale);
     leftBtn.on("pointerdown", (e: any) => {
+      if (this.isGameover) {
+        return;
+      }
       this.movePlayerToLeft();
     });
     leftBtn.on("pointerup", (e: any) => {
+      if (this.isGameover) {
+        return;
+      }
       this.movePlayerBack();
     });
     this.leftBtn = leftBtn;
@@ -393,9 +416,15 @@ class Boat extends Phaser.Scene {
       .setScrollFactor(0);
     rightBtn.setScale(this.params.btnImageScale);
     rightBtn.on("pointerdown", (e: any) => {
+      if (this.isGameover) {
+        return;
+      }
       this.movePlayerToRight();
     });
     rightBtn.on("pointerup", (e: any) => {
+      if (this.isGameover) {
+        return;
+      }
       this.movePlayerBack();
     });
     this.rightBtn = rightBtn;
@@ -432,7 +461,7 @@ const config = {
   type: Phaser.AUTO,
   width: window.innerWidth,
   height: window.innerHeight,
-  scene: Boat,
+  scene: CurveGame,
   parent: "game",
   transparent: true,
   physics: {
@@ -441,9 +470,9 @@ const config = {
   },
 };
 
-const startBoatGame = () => {
+const startCurveGame = () => {
   const game = new Phaser.Game(config);
   return game;
 };
 
-export default startBoatGame;
+export default startCurveGame;

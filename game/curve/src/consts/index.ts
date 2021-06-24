@@ -51,11 +51,15 @@ const masonryConfig = {
 const needSubscribe = false;
 const needCheckChance = true;
 
-const playerUrl = "./static/sprites/player.png";
-const obstacleUrl = "./static/sprites/obstacle.png";
-const presentUrl = "./static/sprites/present.png";
-const leftBtnUrl = "./static/sprites/left-btn.png";
-const rightBtnUrl = "./static/sprites/right-btn.png";
+const resourceUrls = {
+  playerUrl: "./static/sprites/player.png",
+  leftBtnUrl: "./static/sprites/left-btn.png",
+  rightBtnUrl: "./static/sprites/right-btn.png",
+  obstacle1Url: "./static/sprites/obstacle/1.png",
+  obstacle2Url: "./static/sprites/obstacle/2.png",
+  present1Url: "./static/sprites/present/1.png",
+  present2Url: "./static/sprites/present/2.png",
+};
 
 export {
   activityID,
@@ -70,9 +74,5 @@ export {
   masonryConfig,
   needSubscribe,
   needCheckChance,
-  playerUrl,
-  obstacleUrl,
-  presentUrl,
-  leftBtnUrl,
-  rightBtnUrl,
+  resourceUrls,
 };

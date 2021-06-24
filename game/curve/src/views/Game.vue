@@ -1,28 +1,34 @@
 <template>
-  <div class="relative min-h-screen">
+  <div class="bg-game relative min-h-screen">
+    <!-- 数据 -->
+    <div class="fixed z-5 top-9 left-8" v-if="game">
+      <div class="text-danger font-bold text-xl">
+        {{ store.state.game.status.score }}m
+      </div>
+    </div>
     <!-- 游戏 -->
-    <div id="game" class="fixed z-4 w-screen h-screen"></div>
+    <div id="game" class="fixed z-1 w-screen h-screen"></div>
     <!-- 教程 -->
     <div v-show="isTutorialShown">
       <img
         v-show="showT3"
         src="../assets/t-3.jpg"
         alt=""
-        class="fixed cover z-6"
+        class="fixed cover z-2"
         @click="closeT3"
       />
       <img
         v-show="showT2"
         src="../assets/t-2.jpg"
         alt=""
-        class="fixed cover z-7"
+        class="fixed cover z-3"
         @click="closeT2"
       />
       <img
         v-show="showT1"
         src="../assets/t-1.jpg"
         alt=""
-        class="fixed cover z-8"
+        class="fixed cover z-4"
         @click="closeT1"
       />
     </div>
@@ -33,6 +39,7 @@
         @click="dialog.clickCloseDialog"
       ></div>
     </teleport>
+    <!-- 游戏结束弹窗 -->
     <teleport to="#dialogs">
       <div class="dialog" v-show="dialog.showGameFinishDialog.value">
         <div v-if="rank">
@@ -41,43 +48,26 @@
             <div>{{ store.state.game.status.score }}分</div>
           </div>
           <div>
-            <div>
-              <div>累计总分</div>
-              <div>{{ rank.my.score }}分</div>
-            </div>
-            <div>
-              <div>当前排名</div>
-              <div v-if="rank.my.rank === '暂无排名'">
-                {{ rank.my.rank }}
-              </div>
-              <div v-else>NO.{{ rank.my.rank }}</div>
-            </div>
+            <div>累计总分</div>
+            <div>{{ rank.my.score }}分</div>
           </div>
-          <div class="text-center pt-3" v-if="myInfo">
-            <div class="flex-center justify-between space-x-2">
-              <my-btn @click="reload" v-if="Number(myInfo.my_time) > 0">
-                再玩一次
-              </my-btn>
-              <my-btn
-                @click="dialog.openShareTip"
-                v-else-if="ky.yesNo(myInfo.can_share)"
-              >
-                分享好友
-              </my-btn>
+          <div>
+            <div>当前排名</div>
+            <div v-if="rank.my.rank === '暂无排名'">
+              {{ rank.my.rank }}
             </div>
+            <div v-else>NO.{{ rank.my.rank }}</div>
           </div>
         </div>
         <div class="absolute h-center -bottom-16 flex items-center space-x-6">
-          <router-link :to="{ name: 'Home' }" class="relative flex-center">
-            <div>
+          <my-btn @click="reload">
+            再玩一次
+          </my-btn>
+          <router-link :to="{ name: 'Home' }">
+            <my-btn>
               返回首页
-            </div>
+            </my-btn>
           </router-link>
-          <div class="relative flex-center" @click="dialog.openGameRankDialog">
-            <div>
-              排行榜
-            </div>
-          </div>
         </div>
       </div>
     </teleport>
@@ -102,10 +92,10 @@ import useWx from "@/hooks/useWx";
 import { getInfo, getMyInfo, getRank, getStart, postFinish } from "@/apis";
 import ky from "kyouka";
 import MyBtn from "@/components/MyBtn.vue";
-import startBoatGame from "@/game";
 import { isOk } from "@/utils/request";
 import { useStore } from "vuex";
 import { reload } from "@/utils/dom";
+import startCurveGame from "@/game";
 
 export default defineComponent({
   name: "Game",
@@ -131,7 +121,6 @@ export default defineComponent({
     const endGame = async () => {
       const { finishBody } = state;
       finishBody.score = store.state.game.status.score;
-      console.log(finishBody);
       const res = await postFinish(finishBody);
       if (isOk(res)) {
         state.myInfo = await getMyInfo();
@@ -142,8 +131,8 @@ export default defineComponent({
         dialog.openCustomDialog();
       }
     };
-    const startGame = async () => {
-      const game = startBoatGame();
+    const start = async () => {
+      const game = startCurveGame();
       state.game = game;
       while (!store.state.game.status.isGameover) {
         await ky.sleep(0.001);
@@ -163,11 +152,10 @@ export default defineComponent({
         state.showT3 = true;
         localStorage.setItem("tutorial", "true");
       } else {
-        startGame();
+        start();
       }
     };
     const closeT1 = () => {
-      console.log("closet1");
       state.showT1 = false;
     };
     const closeT2 = () => {
@@ -176,7 +164,7 @@ export default defineComponent({
     const closeT3 = async () => {
       state.showT3 = false;
       await ky.sleep(10);
-      startGame();
+      start();
     };
     onMounted(async () => {
       state.info = await getInfo();
@@ -198,7 +186,7 @@ export default defineComponent({
       dialog,
       wx,
       ...toRefs(state),
-      startGame,
+      start,
       endGame,
       reload,
       closeT1,
