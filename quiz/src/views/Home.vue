@@ -1,6 +1,13 @@
 <template>
   <div class="relative min-h-screen">
-    <div class="text-center">
+    <div class="flex flex-col items-center">
+      <!-- 活动时间 -->
+      <time-range
+        v-if="info"
+        :startDate="info.startdate"
+        :endDate="info.enddate"
+      ></time-range>
+      <!-- 答题入口 -->
       <my-btn @click="enter">开始答题</my-btn>
     </div>
     <div class="absolute bottom-14 h-center text-sm">常熟零距离技术支持</div>
@@ -15,6 +22,21 @@
     <!-- 引导分享 -->
     <teleport to="#dialogs">
       <div class="share-tip" v-show="dialog.showShareTip.value"></div>
+    </teleport>
+    <!-- 规则弹窗 -->
+    <teleport to="#dialogs">
+      <div class="dialog" v-show="dialog.showRuleDialog.value">
+        <div
+          class="whitespace-pre-wrap h-60 overflow-y-scroll"
+          v-html="info.rule"
+          v-if="info"
+        ></div>
+        <div class="absolute h-center -bottom-16">
+          <my-btn @click="dialog.closeAllDialog">
+            好的
+          </my-btn>
+        </div>
+      </div>
     </teleport>
     <!-- 强制关注弹窗 -->
     <teleport to="#dialogs">

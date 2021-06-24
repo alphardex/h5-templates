@@ -86,11 +86,9 @@
           <my-btn v-if="Number(info.lotteryed) >= 1 && Number(info.canShare)">
             邀请好友
           </my-btn>
-          <router-link v-else :to="{ name: 'Home' }">
-            <my-btn>
-              好的
-            </my-btn>
-          </router-link>
+          <my-btn v-else @click="dialog.closeAllDialog">
+            好的
+          </my-btn>
         </div>
       </div>
     </teleport>
@@ -114,11 +112,9 @@
           <my-btn v-if="Number(info.canShare)" @click="dialog.openShareTip">
             邀请好友
           </my-btn>
-          <router-link v-else :to="{ name: 'Home' }">
-            <my-btn>
-              好的
-            </my-btn>
-          </router-link>
+          <my-btn v-else @click="dialog.closeAllDialog">
+            好的
+          </my-btn>
         </div>
       </div>
     </teleport>

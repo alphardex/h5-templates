@@ -1,5 +1,5 @@
 <template>
-  <span>{{ timeRangeText }}</span>
+  <div>{{ timeRangeText }}</div>
 </template>
 
 <script lang="ts">
@@ -20,9 +20,9 @@ export default defineComponent({
   },
   setup(props) {
     const timeRangeText = computed(() => {
-      return `${formatDate(Number(props.startDate))}-${formatDate(
-        Number(props.endDate)
-      )}`;
+      return `活动时间：${new Date().getFullYear()}年${formatDate(
+        Number(props.startDate)
+      )}-${formatDate(Number(props.endDate))}`;
     });
     return { timeRangeText };
   },

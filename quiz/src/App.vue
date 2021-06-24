@@ -114,6 +114,7 @@ $colors: "red", "orange", "yellow", "green", "blue", "purple", "brown", "black",
 
 .btn {
   display: inline-flex;
+  white-space: nowrap;
 
   &-sm {
     --btn-padding: 1vw 2vw;
@@ -124,6 +125,10 @@ $colors: "red", "orange", "yellow", "green", "blue", "purple", "brown", "black",
 
 .dialog {
   animation: fade-in 0.6s both;
+}
+
+.form-control {
+  font-size: 3.6vw;
 }
 
 .music {
