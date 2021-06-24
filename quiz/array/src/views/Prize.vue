@@ -17,7 +17,8 @@
             />
           </div>
           <div v-if="info">
-            <span>你还有</span><span>{{ info.remainLotteryChance }}</span
+            <span>你还有</span
+            ><span class="text-danger">{{ info.remainLotteryChance }}</span
             ><span>次抽奖机会</span>
           </div>
         </div>
@@ -124,7 +125,7 @@
         <div class="space-y-2">
           <div class="text-center">
             <div>恭喜您获得</div>
-            <div class="font-bold" v-if="currentPrize">
+            <div class="font-bold text-xl text-danger" v-if="currentPrize">
               {{ currentPrize.prize }}
             </div>
           </div>
