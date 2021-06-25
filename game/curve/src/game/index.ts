@@ -80,13 +80,13 @@ class CurveGame extends Phaser.Scene {
     for (let i = 0; i < this.params.obstacleTypeCount; i++) {
       this.load.image(
         `obstacle-${i + 1}`,
-        (resourceUrls as any)[`obstacle${i + 1}Url`]
+        `./static/sprites/obstacle/${i + 1}.png`
       );
     }
     for (let i = 0; i < this.params.presentTypeCount; i++) {
       this.load.image(
         `present-${i + 1}`,
-        (resourceUrls as any)[`present${i + 1}Url`]
+        `./static/sprites/present/${i + 1}.png`
       );
     }
   }
@@ -154,13 +154,13 @@ class CurveGame extends Phaser.Scene {
       );
       const randPoint = line.getRandomPoint();
       const objectPossibility = ky.randomIntegerInRange(0, 100);
-      if (objectPossibility > 0 && objectPossibility < 30) {
+      if (objectPossibility > 0 && objectPossibility < 40) {
         const presentPoint = randPoint;
         const direction = ky.sample([-1, 1]);
         const xOffset = ky.randomIntegerInRange(30, 40) * direction;
         presentPoint.x += xOffset;
         presentPoints.push(presentPoint);
-      } else if (objectPossibility > 30 && objectPossibility < 70) {
+      } else if (objectPossibility > 40 && objectPossibility < 80) {
         const obstaclePoint = randPoint;
         const xOffset = ky.sample([
           0,

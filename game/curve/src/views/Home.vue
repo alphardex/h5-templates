@@ -2,6 +2,7 @@
   <div class="relative min-h-screen">
     <div class="text-center">
       <my-btn @click="enter">进入游戏</my-btn>
+      <my-btn @click="dialog.openRankDialog">排行榜</my-btn>
     </div>
     <div class="absolute bottom-4 h-center text-sm">常熟零距离技术支持</div>
     <teleport to="#dialogs">
@@ -13,6 +14,15 @@
     </teleport>
     <teleport to="#dialogs">
       <div class="share-tip" v-show="dialog.showShareTip.value"></div>
+    </teleport>
+    <!-- 排行榜弹窗 -->
+    <teleport to="#dialogs">
+      <div class="dialog" v-show="dialog.showRankDialog.value">
+        <rank-list :rank="rank"></rank-list>
+        <div class="absolute h-center -bottom-16">
+          <my-btn @click="dialog.closeAllDialog">关闭</my-btn>
+        </div>
+      </div>
     </teleport>
     <!-- 机会用完弹窗 -->
     <teleport to="#dialogs">
@@ -50,16 +60,18 @@
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import useDialog from "@/hooks/useDialog";
 import useWx from "@/hooks/useWx";
-import { getInfo, getMyInfo } from "@/apis";
+import { getInfo, getMyInfo, getRank } from "@/apis";
 import ky from "kyouka";
 import MyBtn from "@/components/MyBtn.vue";
 import { needCheckChance } from "@/consts";
 import router from "@/router";
+import RankList from "@/components/RankList.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     MyBtn,
+    RankList,
   },
   setup() {
     const dialog = useDialog();
@@ -67,6 +79,7 @@ export default defineComponent({
     const state = reactive<any>({
       info: null,
       myInfo: null,
+      rank: null,
     });
     // 检测是否有游戏机会
     const checkHaveChance = () => {
@@ -85,6 +98,7 @@ export default defineComponent({
     };
     onMounted(async () => {
       state.info = await getInfo();
+      state.rank = await getRank();
       state.myInfo = await getMyInfo();
       await wx.shareAll(state.info);
     });

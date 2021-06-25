@@ -55,10 +55,6 @@ const resourceUrls = {
   playerUrl: "./static/sprites/player.png",
   leftBtnUrl: "./static/sprites/left-btn.png",
   rightBtnUrl: "./static/sprites/right-btn.png",
-  obstacle1Url: "./static/sprites/obstacle/1.png",
-  obstacle2Url: "./static/sprites/obstacle/2.png",
-  present1Url: "./static/sprites/present/1.png",
-  present2Url: "./static/sprites/present/2.png",
 };
 
 export {

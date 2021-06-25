@@ -53,15 +53,14 @@
           </div>
           <div>
             <div>当前排名</div>
-            <div v-if="rank.my.rank === '暂无排名'">
+            <div v-if="rank">
               {{ rank.my.rank }}
             </div>
-            <div v-else>NO.{{ rank.my.rank }}</div>
           </div>
         </div>
         <div class="absolute h-center -bottom-16 flex items-center space-x-6">
           <my-btn @click="reload">
-            再玩一次
+            再次挑战
           </my-btn>
           <router-link :to="{ name: 'Home' }">
             <my-btn>
