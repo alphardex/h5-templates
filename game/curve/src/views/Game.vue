@@ -133,6 +133,12 @@ export default defineComponent({
     const start = async () => {
       const game = startCurveGame();
       state.game = game;
+      // 有的手机首次路径会显示错误，故首次打开时刷新1次，算是临时的解决方案
+      const firstRun = localStorage.getItem("firstRun");
+      if (!firstRun) {
+        localStorage.setItem("firstRun", "true");
+        location.reload();
+      }
       while (!store.state.game.status.isGameover) {
         await ky.sleep(0.001);
       }
