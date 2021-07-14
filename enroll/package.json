@@ -1,0 +1,91 @@
+{
+  "name": "enroll",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@alphardex/aqua.css": "^1.6.7",
+    "axios": "^0.20.0",
+    "blueimp-md5": "^2.18.0",
+    "compressorjs": "^1.0.7",
+    "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
+    "css.gg": "^2.0.0",
+    "dayjs": "^1.10.4",
+    "html2canvas": "^1.0.0-rc.4",
+    "imagesloaded": "^4.1.4",
+    "jsencrypt": "^3.0.0-rc.1",
+    "kyouka": "^1.2.5",
+    "lazyload": "^2.0.0-rc.2",
+    "masonry-layout": "^4.2.2",
+    "object-to-formdata": "^4.1.0",
+    "qs": "^6.9.4",
+    "sweetalert2": "^10.3.6",
+    "vanilla-lazyload": "^17.3.1",
+    "vconsole": "^3.3.4",
+    "vue": "^3.0.2",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0",
+    "weixin-js-sdk": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/blueimp-md5": "^2.7.0",
+    "@types/crypto-js": "^4.0.1",
+    "@types/imagesloaded": "^4.1.2",
+    "@types/masonry-layout": "^4.2.2",
+    "@types/mockjs": "^1.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-vuex": "^4.5.12",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^5.0.2",
+    "axios-mock-adapter": "^1.19.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-vue": "^7.0.0-0",
+    "mockjs": "^1.1.0",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.19.1",
+    "sass-loader": "^8.0.2",
+    "typescript": "~3.9.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "@vue/typescript/recommended",
+      "@vue/prettier",
+      "@vue/prettier/@typescript-eslint"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {
+      "@typescript-eslint/ban-ts-ignore": "off",
+      "@typescript-eslint/camelcase": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "prefer-const": "off"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
